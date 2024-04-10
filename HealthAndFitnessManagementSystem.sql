@@ -25,6 +25,7 @@ create table admins(
 );
 
 create table fitness_acheivments(
+    member_username varchar(255) not null,    
     goal_weight int, 
     goal_deadline date,
     acheivment_id SERIAL PRIMARY KEY

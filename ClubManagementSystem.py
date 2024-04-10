@@ -11,7 +11,6 @@ cur = conn.cursor()
 def signIn():
 
     valid = 0
-    stuff
     while(valid == 0):
         print("------------\nWELCOME TO LOGIN")
         username = input("Please enter in a valid userName: (type 1 to register as a member instead) ")

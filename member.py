@@ -23,6 +23,9 @@ def memberControl(user):
 
         if(inp == "1"): 
             manageProfile()
+        
+
+
 
 def register():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -60,7 +63,7 @@ def register():
 
 def manageProfile():
     os.system('cls' if os.name == 'nt' else 'clear')
-    inp = input("1. View/Update personal information\n2. View Fitness Acheivments\n3. Health Metrics\n4. Return to previous page\nEnter selection: ")
+    inp = input("1. View/Update personal information\n2. Add Fitness Acheivments\n3. Add Health Metrics\n4. Return to previous page\nEnter selection: ")
 
     if(inp == "1"):
         cur.execute("SELECT member_name, current_weight, current_height FROM members WHERE member_username = %s", (userN,))
@@ -122,18 +125,17 @@ def manageProfile():
                 input("Press Enter to continue...")
 
     elif(inp == "2"):
-        print("YOU HAVE NO FITNESS ACHEIVEMENTS")
         # ADDING A GOAL
         w = input("Please enter your goal weight (lbs): ")
         d = input("Please enter the date you want to acheive this goal by: ")
 
-        cur.execute("INSERT INTO fitness_acheivments(goal_weight, goal_deadline) VALUES (%s, %s)", (w, d))
+        cur.execute("INSERT INTO fitness_acheivments(member_username, goal_weight, goal_deadline) VALUES (%s, %s, %s)", (userN, w, d))
         conn.commit()
 
     elif(inp == "3"):
         # print("Add some metric")
         # ADDING A METRIC
-        metIn = input("Choose a metric to input:\n1.BMI\n2.Height (cm) \n3.Weight (lbs) \n Enter input here: ")
+        metIn = input("Choose a metric to input:\n1.BMI\n2.Height (cm) \n3.Weight (lbs) \nEnter input here: ")
         metric = ""
         if(metIn == "1"):
             metric = "BMI"
@@ -144,6 +146,6 @@ def manageProfile():
         measure = input("Please enter a measure for your metric: ")
         currDate = input("Please enter the current date: ")
 
-        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s)", (username, metric, measure, currDate))
+        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s)", (userN, metric, measure, currDate))
         conn.commit()
 
