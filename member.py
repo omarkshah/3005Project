@@ -23,6 +23,9 @@ def memberControl(user):
 
         if(inp == "1"): 
             manageProfile()
+        elif(inp == "2"):
+            memberDashboard()
+    
         
 
 
@@ -146,6 +149,82 @@ def manageProfile():
         measure = input("Please enter a measure for your metric: ")
         currDate = input("Please enter the current date: ")
 
-        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s)", (userN, metric, measure, currDate))
+        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s) ORDER BY date_measured DESC", (userN, metric, measure, currDate))
         conn.commit()
+
+def memberDashboard():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    inp = input("1. Display exercise routine\n2. Display Fitness Achievements\n3. Health Statistics\nEnter selection: ")
+
+    if(inp == "1"):
+        cur.execute("SELECT routine_name, routine_description, duration FROM exercise_routine WHERE member_username = %s", (userN,))
+        results = cur.fetchall()  
+
+        print("EXERCISE ROUTINES")
+        for result in results:
+            print(result[0] + ": \nDescription: \n" + result[1] + "\n Duration: " + str(result[2]))
+
+    elif(inp == "2"):
+        cur.execute("SELECT goal_weight, goal_deadline FROM fitness_acheivments WHERE member_username = %s", (userN,))
+        results = cur.fetchall()  
+
+        print("FITNESS ACHEIVMENTS")
+        for result in results:
+            print(result[0] + ": lbs to be acheived by " + str(result[1]))
+    
+    elif(inp == "3"): 
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "BMI"))
+        results = cur.fetchall()  
+
+        if(results): 
+            print("BMI STATISTICS")
+            for result in results:
+                print(str(result[1]) + ": "  + str(result[0]))
+
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "Height"))
+        results = cur.fetchall()  
+
+        if(results): 
+            print("HEIGHT STATISTICS")
+            for result in results:
+                print(str(result[1]) + ": "  + str(result[0]) + " cm")
+
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "Weight"))
+        results = cur.fetchall()  
+
+        if(results): 
+            print("WEIGHT STATISTICS")
+            for result in results:
+                print(str(result[1]) + ": "  + str(result[0]) + " lbs")
+
+def ptReg():
+    # input time from hardcoded 
+    # check availability table for time
+    # if there add pt sesh to table
+    # if not there say time/date not avail try again
+
+
+    print()
+
+def manageSchedule():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    inp = input("1. View Schedule\n2. Register for Personal Training \n3. Register for Group Fitness Class")
+
+    if(inp == "1"):
+        cur.execute("SELECT trainer_username, session_time FROM exercise_routine WHERE member_username = %s", (userN,))
+        results = cur.fetchall()  
+
+       
+        for result in results:
+            tUn = results[0]
+            sessionTime = str(result[1])
+
+            cur.execute("SELECT trainer_name FROM trainers WHERE trainer_username = %s", (tUn,))
+            result = cur.fetchone()  
+
+            trainerName = result[0]
+
+            print("Session with " + trainerName + " at " + sessionTime)
+
+        
 
