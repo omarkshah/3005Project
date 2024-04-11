@@ -176,7 +176,7 @@ def updateClassSched():
         cur.execute("SELECT class_name, trainer_username, class_time, class_id FROM group_fitness_classes")
         results = cur.fetchall()
 
-        i = 0
+        i = 1
         if(results):
             for result in results:
                 print(str(i) + ". " + result[0] + "with " + result[1] + " at " + str(result[2]))
@@ -206,6 +206,7 @@ def updateClassSched():
                 input("Press enter to continue...")
 
 def viewBills():
+    os.system('cls' if os.name == 'nt' else 'clear')
     cur.execute("SELECT member_username, amount, billing_description, billing_date FROM billings")
     results = cur.fetchall()
 
@@ -218,7 +219,7 @@ def viewBills():
     input("Press enter to continue...")
 
 def createBill():
-
+    os.system('cls' if os.name == 'nt' else 'clear')
     memUser = input("Enter the member's username that you want to charge: ")
     amount = input("Enter the amount you want to change: ")
     descr = input("Enter the billing description: ")

@@ -1,4 +1,5 @@
 import psycopg2 #importing library
+import os
 from member import *
 from trainer import *
 from admin import *
@@ -29,7 +30,7 @@ def signIn():
             else: 
                 print("Username not found. Please try again.")
 
-import time
+os.system('cls' if os.name == 'nt' else 'clear')
 print("Welcome to the Health and Fitness Club Management System")
 username, userRole = signIn()
 

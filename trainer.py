@@ -89,8 +89,6 @@ def removeAvail():
 
     max = 0
 
-    print(results)
-
     if(results):
         for result in results: 
             print((str(result[1])) + ". " + str(result[0]))

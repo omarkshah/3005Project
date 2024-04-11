@@ -92,14 +92,6 @@ create table billings(
     billing_id SERIAL PRIMARY KEY
 );
 
-create table payments(
-    member_username varchar(255) not null,   
-    amount int,    
-    payment_description varchar(255) not null,
-    payment_date date,
-    transaction_id SERIAL PRIMARY KEY
-);
-
 create table equipment_maintenance(
     equipment_name varchar(255) not null,   
     cost int,    
@@ -115,7 +107,7 @@ INSERT INTO users (username, user_role) VALUES
 INSERT INTO trainers (trainer_username, trainer_name) VALUES
 ('jdoe', 'John'),
 ('somesmith', 'Smith'),
-('thetrainer', 'Omair');
+('thetrainer', 'Linus');
 
 INSERT INTO availability (trainer_username, avail_time) VALUES
 ('jdoe', '2024-04-10 09:00:00'),  

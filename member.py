@@ -148,7 +148,7 @@ def manageProfile():
         measure = input("Please enter a measure for your metric: ")
         currDate = input("Please enter the current date: ")
 
-        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s) ORDER BY date_measured DESC", (userN, metric, measure, currDate))
+        cur.execute("INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES (%s, %s, %s, %s)", (userN, metric, measure, currDate))
         conn.commit()
 
 def memberDashboard():
@@ -162,6 +162,7 @@ def memberDashboard():
         print("EXERCISE ROUTINES")
         for result in results:
             print(result[0] + ": \nDescription: \n" + result[1] + "\n Duration: " + str(result[2]))
+            input("Press enter to continue...")
 
     elif(inp == "2"):
         cur.execute("SELECT goal_weight, goal_deadline FROM fitness_acheivments WHERE member_username = %s", (userN,))
@@ -169,10 +170,11 @@ def memberDashboard():
 
         print("FITNESS ACHEIVMENTS")
         for result in results:
-            print(result[0] + ": lbs to be acheived by " + str(result[1]))
+            print(str(result[0]) + ": lbs to be acheived by " + str(result[1]))
+            input("Press enter to continue...")
     
     elif(inp == "3"): 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "BMI"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s ORDER BY date_measured", (userN, "BMI"))
         results = cur.fetchall()  
 
         if(results): 
@@ -180,7 +182,7 @@ def memberDashboard():
             for result in results:
                 print(str(result[1]) + ": "  + str(result[0]))
 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "Height"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s ORDER BY date_measured", (userN, "Height"))
         results = cur.fetchall()  
 
         if(results): 
@@ -188,13 +190,15 @@ def memberDashboard():
             for result in results:
                 print(str(result[1]) + ": "  + str(result[0]) + " cm")
 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "Weight"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s ORDER BY date_measured", (userN, "Weight"))
         results = cur.fetchall()  
 
         if(results): 
             print("WEIGHT STATISTICS")
             for result in results:
                 print(str(result[1]) + ": "  + str(result[0]) + " lbs")
+        
+        input("Press enter to continue...")
 
 def ptReg():
     # input time from hardcoded 
