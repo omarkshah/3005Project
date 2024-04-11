@@ -206,7 +206,23 @@ def updateClassSched():
                 input("Press enter to continue...")
 
 def viewBills():
-    return
+    cur.execute("SELECT member_username, amount, billing_description, billing_date FROM billings")
+    results = cur.fetchall()
+
+    if(results):
+        for result in results: 
+            print("$" + str(result[1]) + " billed to " + result[0] + " for " + result[2] + " on " + str(result[3]))
+    else:
+        print("NO BILLINGS FOUND")
+    
+    input("Press enter to continue...")
 
 def createBill():
-    return
+
+    memUser = input("Enter the member's username that you want to charge: ")
+    amount = input("Enter the amount you want to change: ")
+    descr = input("Enter the billing description: ")
+    billing_date = input("Enter the current date: ")
+
+    cur.execute("INSERT INTO billings(member_username, amount, billing_description, billing_date) VALUES (%s, %s, %s, %s)", (memUser, amount, descr, billing_date))
+    conn.commit()  
