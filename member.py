@@ -28,10 +28,6 @@ def memberControl(user):
         elif(inp == "3"):
             manageSchedule()
     
-        
-
-
-
 def register():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -231,11 +227,6 @@ def ptReg():
         print("NO AVAILABLE TIME\n")
         input("Press enter to continue...")
 
-
-    
-
-    print()
-
 def classReg():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -261,6 +252,8 @@ def manageSchedule():
     inp = input("1. View Schedule\n2. Register for Personal Training \n3. Register for Group Fitness Class")
 
     if(inp == "1"):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
         cur.execute("SELECT trainer_username, session_time FROM pt_sessions WHERE member_username = %s", (userN,))
         results = cur.fetchall()  
 

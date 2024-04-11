@@ -95,6 +95,11 @@ create table payments(
     transaction_id SERIAL PRIMARY KEY
 );
 
+INSERT INTO users (username, user_role) VALUES
+('jdoe', 'Trainer'),
+('somesmith', 'Trainer'),
+('thetrainer', 'Trainer');
+
 INSERT INTO trainers (trainer_username, trainer_name) VALUES
 ('jdoe', 'John'),
 ('somesmith', 'Smith'),

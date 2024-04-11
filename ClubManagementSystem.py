@@ -1,5 +1,6 @@
 import psycopg2 #importing library
 from member import *
+from trainer import *
 
 #Connecting to the server
 conn = psycopg2.connect(database="ClubManagementSystem",
@@ -35,6 +36,8 @@ print(userRole)
 if(userRole == "Member"):
     print("WELCOME: " + username)
     memberControl(username)
+elif(userRole == "Trainer"):
+    trainerControl(username)
     
 
 
