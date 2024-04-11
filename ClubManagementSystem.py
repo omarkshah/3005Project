@@ -43,6 +43,8 @@ elif(userRole == "Trainer"):
 elif(userRole == "Admin"):
     adminControl(username)
 
+os.system('cls' if os.name == 'nt' else 'clear')
+print("Management System Closed")
     
 
 

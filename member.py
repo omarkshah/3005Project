@@ -17,9 +17,9 @@ def memberControl(user):
 
     inp = -1
 
-    while(inp != 4):
+    while(inp != 5):
         os.system('cls' if os.name == 'nt' else 'clear')
-        inp = input("Welcome to the member menu! What would you like to do:\n1. Manage Profile \n2. Go to dashboard \n3. Manage Schedule\n4. Logout \nEnter selection:  ")
+        inp = input("Welcome to the member menu! What would you like to do:\n1. Manage Profile \n2. Go to dashboard \n3. Manage Schedule\n4. Manage Exercise Routine \n5. Logout\nEnter selection:  ")
 
         if(inp == "1"): 
             manageProfile()
@@ -27,9 +27,51 @@ def memberControl(user):
             memberDashboard()
         elif(inp == "3"):
             manageSchedule()
+        elif(inp == "4"):
+            manageExercise()
         else:
-            inp = 4
-    
+            inp = 5
+
+def manageExercise():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    cur.execute("SELECT routine_name, routine_description, duration FROM exercise_routine WHERE member_username = %s", (userN,))
+    result = cur.fetchone()  
+
+    if result:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(result[0] + ":\n" + result[1] + "\nDuration: " + str(result[2]))
+
+        inp = input("Would you like to make a change? Y/N: ")
+
+        if(inp == "Y" or inp== "y"):
+            x = input("What would you like to change: \n1. Name\n2. Description\n3. Duration \nEnter your selection: ")
+            if(x == "1"):
+                name = input("Please enter a new routine name: ")
+                
+                cur.execute("UPDATE exercise_routine SET routine_name = %s WHERE member_username = %s", (name, userN))
+                conn.commit()
+            elif(x == "2"):
+                desc = input("Please enter a new description: ")
+
+                cur.execute("UPDATE exercise_routine SET routine_description = %s WHERE member_username = %s", (desc, userN))
+                conn.commit()           
+            elif(x == "3"):
+                dur = input("Please enter a new duration: ")
+                dur = int(dur)
+                cur.execute("UPDATE exercise_routine SET duration = %s WHERE member_username = %s", (dur, userN))
+                conn.commit()  
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        inp = input("No routine found. Would you like to add one? Y/N: ")
+
+        if(inp == "y" or inp == "Y"):
+            name = input("Please enter a routine name: ")
+            desc = input("Please enter a description: ")
+            dur = input("Please enter a duration: ")
+
+            cur.execute("INSERT INTO exercise_routine(member_username, routine_name, routine_description, duration) VALUES (%s, %s, %s, %s)", (userN, name, desc, dur))
+            conn.commit()  
+
 def register():
     os.system('cls' if os.name == 'nt' else 'clear')
 
