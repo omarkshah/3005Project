@@ -63,7 +63,6 @@ def register():
 
     return username, "Member"
     
-
 def manageProfile():
     os.system('cls' if os.name == 'nt' else 'clear')
     inp = input("1. View/Update personal information\n2. Add Fitness Acheivments\n3. Add Health Metrics\n4. Return to previous page\nEnter selection: ")
@@ -173,7 +172,7 @@ def memberDashboard():
             print(result[0] + ": lbs to be acheived by " + str(result[1]))
     
     elif(inp == "3"): 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "BMI"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "BMI"))
         results = cur.fetchall()  
 
         if(results): 
@@ -181,7 +180,7 @@ def memberDashboard():
             for result in results:
                 print(str(result[1]) + ": "  + str(result[0]))
 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "Height"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "Height"))
         results = cur.fetchall()  
 
         if(results): 
@@ -189,7 +188,7 @@ def memberDashboard():
             for result in results:
                 print(str(result[1]) + ": "  + str(result[0]) + " cm")
 
-        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username AND metric_type = %s", (userN, "Weight"))
+        cur.execute("SELECT metric_measure, date_measured FROM metrics WHERE member_username = %s AND metric_type = %s", (userN, "Weight"))
         results = cur.fetchall()  
 
         if(results): 
@@ -202,9 +201,55 @@ def ptReg():
     # check availability table for time
     # if there add pt sesh to table
     # if not there say time/date not avail try again
+    os.system('cls' if os.name == 'nt' else 'clear')
 
+    x = input("Please input a date: ")
+
+    timestamp = ""
+    inp = input("Please enter choose a time for the data:\n1. 9:00\n2.10:00\n3. 11:00\n4.12:00")
+    if(inp == "1"):
+        timestamp = x + "9:00"
+    elif(inp == "2"):
+        timestamp = x + "10:00"
+    elif(inp == "3"):
+        timestamp = x + "11:00"
+    else: 
+        timestamp = x + "12:00"
+
+    cur.execute("SELECT trainer_username, availability_id FROM availability WHERE avail_time = %s", (timestamp,))
+    results = cur.fetchall()  
+
+    if(results):
+        cur.execute("INSERT INTO pt_sessions(trainer_username, member_username, session_time) VALUES (%s, %s, %s)", (results[0][0], userN, timestamp))
+        conn.commit()
+
+        cur.execute("DELETE FROM availability WHERE availability_id = %s", (results[0][1],))
+        conn.commit()
+
+
+    
 
     print()
+
+def classReg():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    cur.execute("SELECT class_name, class_time, class_id FROM group_fitness_classes")
+    results = cur.fetchall()  
+    
+    if results:
+        i = 1
+        for result in results: 
+            print(str(i) + ". " + result[0] + "\nTime: " + str(result[1]))
+            i = i + 1
+        
+        inp = input("Please enter your selection for class: ")
+
+        if(inp < 1 or inp >= i):
+            return
+        else:
+            cur.execute("INSERT INTO group_fitness_participants(member_username, class_id) VALUES (%s, %s)", (userN, results[inp-1][2]))
+            conn.commit()
 
 def manageSchedule():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -225,6 +270,10 @@ def manageSchedule():
             trainerName = result[0]
 
             print("Session with " + trainerName + " at " + sessionTime)
+    elif(inp == "2"):
+        ptReg()
+    elif(inp == "3"):
+        classReg()
 
         
 
