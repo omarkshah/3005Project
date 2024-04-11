@@ -27,6 +27,8 @@ def memberControl(user):
             memberDashboard()
         elif(inp == "3"):
             manageSchedule()
+        else:
+            inp = 4
     
 def register():
     os.system('cls' if os.name == 'nt' else 'clear')

@@ -16,9 +16,9 @@ def trainerControl(trainer):
 
     inp = -1
 
-    while(inp != 4):
+    while(inp != 5):
         os.system('cls' if os.name == 'nt' else 'clear')
-        inp = input("Welcome to the trainer menu! What would you like to do:\n1. View Availability\n2. Add availability \n3. Remove availability \n4. Member Search \nEnter selection:  ")
+        inp = input("Welcome to the trainer menu! What would you like to do:\n1. View Availability\n2. Add availability \n3. Remove availability \n4. Member Search \n5. Logout\nEnter selection:  ")
 
         if(inp == "1"):
             viewAvail()
@@ -28,6 +28,9 @@ def trainerControl(trainer):
             removeAvail()
         elif(inp == "4"):
             memberSearch()
+        else: 
+            inp = 5
+
 
 def viewAvail():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -76,7 +79,77 @@ def addAvail():
     viewAvail()
 
 def removeAvail():
-    return
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    print("CURRENT AVAILABILITY:\n")
+
+
+    cur.execute("SELECT avail_time, availability_id FROM availability WHERE trainer_username = %s ORDER BY avail_time", (trainerN,))
+    results = cur.fetchall()  
+
+    max = 0
+
+    print(results)
+
+    if(results):
+        for result in results: 
+            print((str(result[1])) + ". " + str(result[0]))
+            if(int(result[1]) > max):
+                max = int(result[1])
+
+        inp = input("Please choose an availability to remove: ")
+
+        if(int(inp) < 1 or int(inp) > max):
+            input("Invalid choice...")
+        else:
+            cur.execute("DELETE FROM availability WHERE availability_id = %s", (inp,))
+            conn.commit()
+            viewAvail()
 
 def memberSearch():
-    return
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    name = input("Please enter a member's name (Enter 1 to receive a list of member names): ")
+
+    if(name == "1"):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        cur.execute("SELECT member_name FROM members")
+        results = cur.fetchall()  
+
+        index = 1
+
+        if(results):
+            for result in results: 
+                print(str(index) + ". " + result[0])
+                index = index + 1
+
+            inp = input("Select a member from the list (type the corresponding number): ")
+            inp = int(inp)
+            if(inp > 0 and inp < index):    
+                name = results[inp - 1][0]
+
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+    cur.execute("SELECT member_username, member_name, current_weight, current_height FROM members WHERE member_name = %s", (name,))
+    results = cur.fetchall()  
+
+    if(results):
+        
+        i = 1
+
+        for result in results:
+            print(str(i) + ". " + result[0])
+            i = i + 1
+        
+        select = input("Please select a user: ")
+
+        if(int(select) >= 1 and int(select) < i):     
+            os.system('cls' if os.name == 'nt' else 'clear')
+
+            print(results[int(select) - 1][1] + "'s Profile:")
+            print("Current Weight: " + str(results[int(select) - 1][2]))
+            print("Current Height: " + str(results[int(select) - 1][3]))
+
+            input("\nPress enter to continue...")
+        else: 
+            input("Your selection was not valid. Press enter to continue...")
