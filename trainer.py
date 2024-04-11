@@ -52,7 +52,7 @@ def viewAvail():
 def addAvail():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    d = input("Please enter a data for your availability: ")
+    d = input("Please enter a date for your availability: ")
     inp = input("Please choose a time: \n1. 9:00 \n2. 10:00 \n3. 11:00 \n4. 12:00 ")
 
     timestamp = ""
