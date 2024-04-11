@@ -100,6 +100,13 @@ create table payments(
     transaction_id SERIAL PRIMARY KEY
 );
 
+create table equipment_maintenance(
+    equipment_name varchar(255) not null,   
+    cost int,    
+    maintenance_date date,
+    maintenance_id SERIAL PRIMARY KEY
+);
+
 INSERT INTO users (username, user_role) VALUES
 ('jdoe', 'Trainer'),
 ('somesmith', 'Trainer'),
@@ -134,3 +141,7 @@ INSERT INTO admins(admin_username, admin_name) VALUES
 INSERT INTO users (username, user_role) VALUES
 ('bgates', 'Admin'),
 ('melon', 'Admin');
+
+INSERT INTO equipment_maintenance(equipment_name, cost, maintenance_date) VALUES 
+('Cable', 200, '2024-04-10'),
+('Chest Press', 123, '2024-03-18');

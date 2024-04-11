@@ -55,8 +55,6 @@ def viewBookings():
     
     input("Press enter to continue...")
 
-
-
 def bookRoom():
     os.system('cls' if os.name == 'nt' else 'clear')
     # get time stamp
@@ -100,10 +98,112 @@ def bookRoom():
         input("NO AVAILABLE ROOMS...")
 
 def monitorMaint():
-    return
+    os.system('cls' if os.name == 'nt' else 'clear')
+    inp = input("Would you like to:\n1. View Maintenance Logs\n2. Log a new Equipment Maintenance\nEnter selection: ")
+
+    if(inp == "1"):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    
+        cur.execute("SELECT equipment_name, cost, maintenance_date FROM equipment_maintenance")
+        results = cur.fetchall()
+
+        print("MAINTENANCE LOGS")
+        print('---')
+
+        if results:
+            for result in results:
+                print(result[0] + "\nCost: $" + str(result[1]) + "\nDate: " + str(result[2]))
+                print('---')
+        else:
+            print("Nothing to display...")
+        input("Press enter to continue...")
+
+    elif(inp == "2"): 
+
+        equipName = input("Please enter the equipment name: ")
+        cost = input("Please enter the cost of maintenance: ")
+        mainDate = input("Please enter the date the maintenance was done: ")
+
+        cur.execute("INSERT INTO equipment_maintenance(equipment_name, cost, maintenance_date) VALUES (%s, %s, %s)", (equipName, int(cost), mainDate))
+        conn.commit()  
 
 def updateClassSched():
-    return
+    os.system('cls' if os.name == 'nt' else 'clear')
+    inp = input("Do you want to:\n1. Add a class \n2. Cancel a class\nEnter a selection: ")
+    os.system('cls' if os.name == 'nt' else 'clear')
+    #adding a schedule to classes
+    #pick a data time + class name
+        # if there is a trainer with availability during datetime then add class to classes table
+    if(inp == "1"):
+       
+    # get time stamp
+        d = input("Please enter a date for your class: ")
+        inp = input("Please choose a time: \n1. 9:00 \n2. 10:00 \n3. 11:00 \n4. 12:00 ")
+
+        timestamp = ""
+        if(inp == "1"):
+            timestamp = d + " 9:00"
+        elif(inp == "2"):
+            timestamp = d + " 10:00"
+        elif(inp == "3"):
+            timestamp = d + " 11:00"
+        else: 
+            timestamp = d + " 12:00"
+
+        cur.execute("SELECT trainer_username, availability_id FROM availability WHERE avail_time = %s ", (timestamp,))
+        result = cur.fetchone() 
+
+        cName = input("Please enter a name for the class: ")
+
+        if(result): 
+            cur.execute("INSERT INTO group_fitness_classes(class_name, trainer_username, class_time) VALUES (%s, %s, %s)", (cName, result[0], timestamp))
+            conn.commit()  
+
+            cur.execute("DELETE FROM availability WHERE availability_id = %s", (result[1],))
+            conn.commit()
+
+        else:
+            input("No trainers with this availability...")
+
+
+    #removing a class (cancelling) 
+    # get classId from classes table
+    # remove all particiapnt in classID from participants table
+    # remove classId from classes table
+    elif(inp == "2"): 
+        
+        cur.execute("SELECT class_name, trainer_username, class_time, class_id FROM group_fitness_classes")
+        results = cur.fetchall()
+
+        i = 0
+        if(results):
+            for result in results:
+                print(str(i) + ". " + result[0] + "with " + result[1] + " at " + str(result[2]))
+                i = i + 1
+
+            x = input("Enter the class you would like to cancel (number): ")
+            x = int(x)
+            if(x >= 1 and x < i):
+                classId = results[x - 1][3]
+
+                cur.execute("DELETE FROM group_fitness_participants WHERE class_id = %s", (classId,))
+                conn.commit()
+
+                cur.execute("DELETE FROM group_fitness_classes WHERE class_id = %s", (classId,))
+                conn.commit()
+
+                print("NEW SCHEDULE")
+                cur.execute("SELECT class_name, trainer_username, class_time, class_id FROM group_fitness_classes")
+                results = cur.fetchall()
+
+                i = 1
+                if(results):
+                    for result in results:
+                        print(str(i) + ". " + result[0] + "with " + result[1] + " at " + str(result[2]))
+                        i = i + 1
+
+                input("Press enter to continue...")
 
 def viewBills():
     return
