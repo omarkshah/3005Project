@@ -25,6 +25,8 @@ def memberControl(user):
             manageProfile()
         elif(inp == "2"):
             memberDashboard()
+        elif(inp == "3"):
+            manageSchedule()
     
         
 
@@ -208,13 +210,13 @@ def ptReg():
     timestamp = ""
     inp = input("Please enter choose a time for the data:\n1. 9:00\n2.10:00\n3. 11:00\n4.12:00")
     if(inp == "1"):
-        timestamp = x + "9:00"
+        timestamp = x + " 9:00"
     elif(inp == "2"):
-        timestamp = x + "10:00"
+        timestamp = x + " 10:00"
     elif(inp == "3"):
-        timestamp = x + "11:00"
+        timestamp = x + " 11:00"
     else: 
-        timestamp = x + "12:00"
+        timestamp = x + " 12:00"
 
     cur.execute("SELECT trainer_username, availability_id FROM availability WHERE avail_time = %s", (timestamp,))
     results = cur.fetchall()  
@@ -225,6 +227,9 @@ def ptReg():
 
         cur.execute("DELETE FROM availability WHERE availability_id = %s", (results[0][1],))
         conn.commit()
+    else: 
+        print("NO AVAILABLE TIME\n")
+        input("Press enter to continue...")
 
 
     
@@ -245,10 +250,10 @@ def classReg():
         
         inp = input("Please enter your selection for class: ")
 
-        if(inp < 1 or inp >= i):
+        if(int(inp) < 1 or int(inp) >= i):
             return
         else:
-            cur.execute("INSERT INTO group_fitness_participants(member_username, class_id) VALUES (%s, %s)", (userN, results[inp-1][2]))
+            cur.execute("INSERT INTO group_fitness_participants(member_username, class_id) VALUES (%s, %s)", (userN, results[int(inp)-1][2]))
             conn.commit()
 
 def manageSchedule():
@@ -256,20 +261,44 @@ def manageSchedule():
     inp = input("1. View Schedule\n2. Register for Personal Training \n3. Register for Group Fitness Class")
 
     if(inp == "1"):
-        cur.execute("SELECT trainer_username, session_time FROM exercise_routine WHERE member_username = %s", (userN,))
+        cur.execute("SELECT trainer_username, session_time FROM pt_sessions WHERE member_username = %s", (userN,))
         results = cur.fetchall()  
 
-       
-        for result in results:
-            tUn = results[0]
-            sessionTime = str(result[1])
+        if(results):
+            for result in results:
+                tUn = result[0]
+                sessionTime = str(result[1])
 
-            cur.execute("SELECT trainer_name FROM trainers WHERE trainer_username = %s", (tUn,))
-            result = cur.fetchone()  
+                cur.execute("SELECT trainer_name FROM trainers WHERE trainer_username = %s", (tUn,))
+                result = cur.fetchone()  
 
-            trainerName = result[0]
+                trainerName = result[0]
 
-            print("Session with " + trainerName + " at " + sessionTime)
+                print("Session with " + trainerName + " at " + sessionTime)
+
+        cur.execute("SELECT class_id FROM group_fitness_participants WHERE member_username = %s", (userN,))
+        classes = cur.fetchall()  
+
+        for fClass in classes: 
+            cur.execute("SELECT class_name, trainer_username, class_time FROM group_fitness_classes WHERE class_id = %s", (fClass[0],))
+            result = cur.fetchone()
+
+            if(result):
+                className = result[0]
+                tUn = result[1]
+                classTime = result[2]
+
+                cur.execute("SELECT trainer_name FROM trainers WHERE trainer_username = %s", (tUn,))
+                r = cur.fetchone()  
+                
+                trainerName = r[0]
+
+                print(className + " class with " + trainerName + " at " + str(classTime))
+
+
+
+        
+        input("Press enter to continue...")
     elif(inp == "2"):
         ptReg()
     elif(inp == "3"):
