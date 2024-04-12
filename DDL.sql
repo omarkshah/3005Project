@@ -1,7 +1,7 @@
 create table users(
     username varchar(255) not null,    
     user_role varchar(255) not null,
-    member_id SERIAL PRIMARY KEY
+    user_id SERIAL PRIMARY KEY
 );
 
 create table members(
