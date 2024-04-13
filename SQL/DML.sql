@@ -1,8 +1,8 @@
 INSERT INTO users (username, user_role) VALUES
-('omarshah', 'Member')
+('omarshah', 'Member'),
 ('jdoe', 'Trainer'),
 ('somesmith', 'Trainer'),
-('thetrainer', 'Trainer');
+('thetrainer', 'Trainer'),
 ('bgates', 'Admin'),
 ('melon', 'Admin');
 
@@ -14,13 +14,18 @@ INSERT INTO trainers (trainer_username, trainer_name) VALUES
 ('somesmith', 'Smith'),
 ('thetrainer', 'Linus');
 
+INSERT INTO admins(admin_username, admin_name) VALUES
+('bgates', 'Bill'),
+('melon', 'Melon Tusk');
+
+
 INSERT INTO availability (trainer_username, avail_time) VALUES
 ('jdoe', '2024-04-10 09:00:00'),  
 ('jdoe', '2024-04-11 10:00:00'),  
 ('somesmith', '2024-04-10 10:00:00'), 
 ('somesmith', '2024-04-11 11:00:00'),  
 ('thetrainer', '2024-04-10 12:00:00'),
-('thetrainer', '2024-04-10 13:00:00');
+('thetrainer', '2024-04-10 12:00:00');
 
 INSERT INTO group_fitness_classes (class_name, trainer_username, class_time) VALUES
 ('Cycling', 'jdoe', '2024-04-11 10:00:00'),
@@ -34,12 +39,8 @@ INSERT INTO rooms(room_number, room_capacity) VALUES
 (2, 3),
 (3, 10);
 
-INSERT INTO room_bookings(room_number, booker_username, booking_time) VALUES 
+INSERT INTO room_bookings(room_number, admin_username, booking_time) VALUES 
 (1, 'bgates', '2024-04-11 09:00:00');
-
-INSERT INTO admins(admin_username, admin_name) VALUES
-('bgates', 'Bill'),
-('melon', 'Melon Tusk');
 
 INSERT INTO equipment_maintenance(equipment_name, cost, maintenance_date) VALUES 
 ('Cable', 200, '2024-04-10'),
@@ -49,7 +50,7 @@ INSERT INTO fitness_acheivments(member_username, goal_weight, goal_deadline) VAL
 ('omarshah', 200, '2025-01-01');
 
 INSERT INTO metrics(member_username, metric_type, metric_measure, date_measured) VALUES
-('omarshah', BMI, 52, '2024-04-11');
+('omarshah', 'BMI', 52, '2024-04-11');
 
 INSERT INTO exercise_routine(member_username, routine_name, routine_description, duration) VALUES
 ('omarshah', 'PPL', 'a push pull legs routine', 90);

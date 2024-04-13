@@ -122,7 +122,7 @@ def manageProfile():
         x = input("\nWould you like to make changes: Y/N ")
 
         if(x == "Y" or x == "y"):
-            x = input("Would you like to change:\n1. Name\n2. Goal Weight\n3. Current Height\n4. Exit\n Enter selection: ")
+            x = input("Would you like to change:\n1. Name\n2. Current Weight\n3. Current Height\n4. Exit\n Enter selection: ")
             if(x == "1"):
                 name = input("Please enter a new name: ")
                 result =  cur.execute("UPDATE members SET member_name = %s WHERE member_username = %s", (name, userN))

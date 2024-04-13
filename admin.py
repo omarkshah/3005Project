@@ -45,7 +45,7 @@ def viewBookings():
 
     print(name + "'s Bookings: \n")
 
-    cur.execute("SELECT room_number, booking_time FROM room_bookings WHERE booker_username = %s", (adminN,))
+    cur.execute("SELECT room_number, booking_time FROM room_bookings WHERE admin_username = %s", (adminN,))
     results = cur.fetchall()  
 
     i = 1
@@ -89,7 +89,7 @@ def bookRoom():
         inp = int(inp)
         if(inp >= 1 and inp < i):
             #add result[inp -1][0] and timestamp and adminusername to room_booking
-            cur.execute("INSERT INTO room_bookings(room_number, booker_username, booking_time) VALUES (%s, %s, %s)", (results[inp - 1][0], adminN, timestamp))
+            cur.execute("INSERT INTO room_bookings(room_number, admin_username, booking_time) VALUES (%s, %s, %s)", (results[inp - 1][0], adminN, timestamp))
             conn.commit()  
 
             viewBookings()
